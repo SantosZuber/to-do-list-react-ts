@@ -17,9 +17,13 @@ export function ToDoForm({ tasks, setTasks }: Props["tasks"]) {
   }
 
   function addTask(newTask: Task): void {
-    const newTasks: Task[] = [...tasks, newTask];
-    setTasks(newTasks);
-    setNewTask(INITIAL_STATE);
+    if (newTask.body) {
+      const newTasks: Task[] = [...tasks, newTask];
+      setTasks(newTasks);
+      setNewTask(INITIAL_STATE);
+    } else {
+      return;
+    }
   }
 
   return (

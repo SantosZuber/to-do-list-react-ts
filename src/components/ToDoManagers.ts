@@ -26,9 +26,13 @@ export function handleEditing(
   tasks: Array<Task>,
   setTasks: React.Dispatch<React.SetStateAction<Array<Task>>>
 ): void {
-  const newTasks: Array<Task> = [...tasks];
-  newTasks[index].body = value;
-  setTasks(newTasks);
+  if (value) {
+    const newTasks: Array<Task> = [...tasks];
+    newTasks[index].body = value;
+    setTasks(newTasks);
+  } else {
+    return;
+  }
 }
 
 export function handleDelete(
