@@ -4,9 +4,10 @@ export interface Task {
   isEditing: bool;
 }
 
-interface Props {
+export interface Props {
   tasks: {
     tasks: Task[];
     setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+    colorMode?: ColorMode;
   };
 }

@@ -6,34 +6,26 @@ import {
   StackDivider,
   Spacer,
   Input,
+  Badge,
 } from "@chakra-ui/react";
 import { FaTrash, FaCheck, FaPen } from "react-icons/fa";
 import { Props, Task } from "../types";
 import { twinkle } from "../animations/animations";
+import {
+  handleDelete,
+  handleEditing,
+  handleToggleEdit,
+  handleToggleDone,
+} from "./ToDoManagers";
 
-export function ToDoList({ tasks, setTasks }: Props["tasks"]) {
-  function handleToggleDone(index: number): void {
-    const newTasks: Array<Task> = [...tasks];
-    newTasks[index].isDone = !newTasks[index].isDone;
-    setTasks(newTasks);
+export function ToDoList({ tasks, setTasks, colorMode }: Props["tasks"]) {
+  if (!tasks.length) {
+    return (
+      <Badge colorScheme={"green"} p={4} m={4} borderRadius={"lg"}>
+        You don't have any to-dos!
+      </Badge>
+    );
   }
-
-  function handleToggleEdit(index: number): void {
-    const newTasks: Array<Task> = [...tasks];
-    newTasks[index].isEditing = !newTasks[index].isEditing;
-    setTasks(newTasks);
-  }
-  function handleEditing(index: number, value: string): void {
-    const newTasks: Array<Task> = [...tasks];
-    newTasks[index].body = value;
-    setTasks(newTasks);
-  }
-  function handleDelete(index: number): void {
-    const newTasks: Array<Task> = [...tasks];
-    newTasks.splice(index, 1);
-    setTasks(newTasks);
-  }
-
   return (
     <VStack
       divider={<StackDivider />}
@@ -52,10 +44,10 @@ export function ToDoList({ tasks, setTasks }: Props["tasks"]) {
               type={"text"}
               animation={todo.isEditing ? `${twinkle} infinite 2s` : "none"}
               textDecorationLine={todo.isDone ? "line-through" : "none"}
-              color={todo.isEditing ? "gray" : "black"}
+              color={colorMode == "light" ? "black" : "white"}
               opacity={todo.isDone ? "30%" : "100%"}
               onChange={(e) => {
-                handleEditing(index, e.target.value);
+                handleEditing(index, e.target.value, tasks, setTasks);
               }}
               border={"none"}
               value={todo.body}
@@ -73,7 +65,7 @@ export function ToDoList({ tasks, setTasks }: Props["tasks"]) {
                 backgroundColor: "#61dd58",
               }}
               onClick={() => {
-                handleToggleDone(index);
+                handleToggleDone(index, tasks, setTasks);
               }}
             />
             <IconButton
@@ -86,7 +78,7 @@ export function ToDoList({ tasks, setTasks }: Props["tasks"]) {
                 backgroundColor: "#74a8e0",
               }}
               onClick={() => {
-                handleToggleEdit(index);
+                handleToggleEdit(index, tasks, setTasks);
               }}
             />
             <IconButton
@@ -100,7 +92,7 @@ export function ToDoList({ tasks, setTasks }: Props["tasks"]) {
                 transition: "0.1s background-color",
               }}
               onClick={() => {
-                handleDelete(index);
+                handleDelete(index, tasks, setTasks);
               }}
             />
           </HStack>
